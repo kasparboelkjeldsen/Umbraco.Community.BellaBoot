@@ -112,6 +112,22 @@ public static class DevCommand
             AnsiConsole.MarkupLine("[grey]Press Ctrl+C to stop.[/]");
             AnsiConsole.WriteLine();
 
+            // Ensure npm dependencies are installed
+            if (!Directory.Exists(Path.Combine(extensionDir, "node_modules")))
+            {
+                AnsiConsole.MarkupLine("[yellow]node_modules not found[/] — running npm install...");
+                var (installFile, installArgs) = NpmCommand(["install"]);
+                var (installCode, installOutput) = await TargetCommand.RunAsync(installFile, installArgs, extensionDir, ct);
+                if (installCode != 0)
+                {
+                    AnsiConsole.MarkupLine("[red]npm install failed[/]");
+                    AnsiConsole.MarkupLine($"[grey]{installOutput}[/]");
+                    return 1;
+                }
+                AnsiConsole.MarkupLine("[green]npm install done[/]");
+                AnsiConsole.WriteLine();
+            }
+
             var processes = new List<Process>();
 
             if (!frontendOnly)

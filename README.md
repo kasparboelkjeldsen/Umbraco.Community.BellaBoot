@@ -6,6 +6,12 @@ CLI tool for scaffolding and developing Umbraco Bellissima (v14+) packages.
 dotnet tool install -g Umbraco.Community.BellaBoot
 ```
 
+To update to the latest version:
+
+```
+dotnet tool update -g Umbraco.Community.BellaBoot
+```
+
 ## Commands
 
 ### `bellaboot new <name>`
