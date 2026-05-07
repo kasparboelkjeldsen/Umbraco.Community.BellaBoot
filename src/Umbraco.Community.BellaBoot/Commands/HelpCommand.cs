@@ -27,17 +27,17 @@ public static class HelpCommand
                 "[grey]--output -o, --author[/]");
 
             table.AddRow(
-                "[green]target[/] [grey][version][/]",
+                "[green]target[/] [grey][[version]][/]",
                 "Spin up an Umbraco test instance\nwith uSync + backend reference",
                 "[grey]--output -o, --models-mode -mm[/]");
 
             table.AddRow(
-                "[green]nuget[/] [grey][version][/]",
+                "[green]nuget[/] [grey][[version]][/]",
                 "Bump backend version, pack locally,\nspin up Umbraco with the package installed",
                 "[grey]--output -o, --models-mode -mm[/]");
 
             table.AddRow(
-                "[green]dev[/] [grey][version][/]",
+                "[green]dev[/] [grey][[version]][/]",
                 "dotnet watch + vite watch against\na live Umbraco instance",
                 "[grey]--output -o, --frontend-only -f[/]");
 
