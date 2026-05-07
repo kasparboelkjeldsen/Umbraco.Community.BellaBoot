@@ -1,0 +1,15 @@
+{
+  "$schema": "./../umbraco-package-schema.json",
+  "id": "{name}.Frontend",
+  "name": "{name}.Frontend",
+  "allowPackageTelemetry": true,
+  "version": "0.0.0",
+  "extensions": [
+    {
+      "type": "backofficeEntryPoint",
+      "alias": "{name}.EntryPoint",
+      "name": "{name} Entry Point",
+      "js": "/App_Plugins/{namelower}.frontend/dist.js"
+    }
+  ]
+}

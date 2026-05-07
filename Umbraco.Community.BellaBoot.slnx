@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Umbraco.Community.BellaBoot/Umbraco.Community.BellaBoot.csproj" />
+  </Folder>
+</Solution>

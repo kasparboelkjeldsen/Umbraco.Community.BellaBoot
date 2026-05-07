@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="{name}.Backend/{name}.Backend.csproj" />
+  <Project Path="{name}.Extension/{name}.Extension.esproj" />
+</Solution>

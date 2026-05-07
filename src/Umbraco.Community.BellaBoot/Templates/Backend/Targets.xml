@@ -1,0 +1,26 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <{mb}ContentFilesPath>$(MSBuildThisFileDirectory)..\content\ui\**</{mb}ContentFilesPath>
+  </PropertyGroup>
+
+  <Target Name="Copy{mb}Assets" BeforeTargets="ResolveStaticWebAssetsInputs">
+    <ItemGroup>
+      <{mb}ContentFiles Include="$({mb}ContentFilesPath)" />
+    </ItemGroup>
+    <Message Text="Copying {name} assets: $({mb}ContentFilesPath) - #@({mb}ContentFiles->Count()) files" Importance="high" />
+    <Copy
+      SourceFiles="@({mb}ContentFiles)"
+      DestinationFiles="@({mb}ContentFiles->'$(MSBuildProjectDirectory)\wwwroot\App_Plugins\{namelower}.frontend\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="Clear{mb}Assets" BeforeTargets="Clean">
+    <ItemGroup>
+      <{mb}AppPluginsDir Include="$(MSBuildProjectDirectory)\wwwroot\App_Plugins\{namelower}.frontend\" />
+    </ItemGroup>
+    <Message Text="Clearing {name} assets" Importance="high" />
+    <RemoveDir Directories="@({mb}AppPluginsDir)" />
+  </Target>
+
+</Project>
