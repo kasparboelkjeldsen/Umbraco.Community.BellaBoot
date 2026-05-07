@@ -9,7 +9,7 @@
 
     <!-- NuGet / dotnet tool packaging -->
     <PackageId>Umbraco.Community.BellaBoot</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Kaspar Boel Kjeldsen</Authors>
     <Description>CLI tool for scaffolding Umbraco Bellissima (v14+) packages.</Description>
     <PackageTags>umbraco;bellissima;cli;scaffold</PackageTags>
