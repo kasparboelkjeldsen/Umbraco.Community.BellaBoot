@@ -484,3 +484,4 @@ $RECYCLE.BIN/
 # BellaBoot
 test-output/
 .claude/
+nupkg/

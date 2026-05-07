@@ -14,6 +14,8 @@
     <Description>CLI tool for scaffolding Umbraco Bellissima (v14+) packages.</Description>
     <PackageTags>umbraco;bellissima;cli;scaffold</PackageTags>
     <PackageProjectUrl>https://github.com/kasparboelkjeldsen/Umbraco.Community.BellaBoot</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <!-- Global tool -->
     <PackAsTool>true</PackAsTool>
@@ -23,6 +25,10 @@
   <ItemGroup>
     <Compile Remove="Templates\**" />
     <EmbeddedResource Include="Templates\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
