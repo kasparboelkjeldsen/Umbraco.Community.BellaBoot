@@ -46,6 +46,11 @@ public static class HelpCommand
                 "Copy the newest uSync folder\nto all other Umbraco instances",
                 "[grey]--output -o[/]");
 
+            table.AddRow(
+                "[green]delete[/] [grey]|[/] [green]del[/] [grey]<version>[/]",
+                "Remove a target Umbraco instance\nand its nuget variant from disk and solution",
+                "[grey]--output -o[/]");
+
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();
             AnsiConsole.MarkupLine("[grey]version[/] accepts [grey]Latest[/], [grey]LTS[/], or a semver string such as [grey]17.3.5[/]");

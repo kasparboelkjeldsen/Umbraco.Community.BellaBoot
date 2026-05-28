@@ -39,6 +39,11 @@ public static class AiHelpCommand
           Scans Umbraco/*/ for uSync/ folders, finds the one with the newest file, copies it
           to all other Umbraco instances (creates uSync/ if missing).
 
+        bellaboot delete <version> [--output|-o <dir>]   (alias: del)
+          Removes Umbraco/<version>/ and Umbraco/<version>-nuget/ from disk and removes
+          their project entries from the .slnx solution file (drops the /Umbraco/ folder
+          element if it becomes empty).
+
         STRUCTURE (after new + target)
           <name>.slnx
           <name>.Backend/

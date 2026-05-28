@@ -9,6 +9,7 @@ root.Subcommands.Add(TargetCommand.Build());
 root.Subcommands.Add(DistUsyncCommand.Build());
 root.Subcommands.Add(NuGetCommand.Build());
 root.Subcommands.Add(DevCommand.Build());
+root.Subcommands.Add(DeleteCommand.Build());
 root.Subcommands.Add(HelpCommand.Build());
 root.Subcommands.Add(AiHelpCommand.Build());
 
