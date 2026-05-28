@@ -308,7 +308,7 @@ public static class TargetCommand
             using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
             http.DefaultRequestHeaders.UserAgent.ParseAdd("BellaBoot/1.0");
             var html = await http.GetStringAsync("https://releases.umbraco.com/all-releases", ct);
-            var match = Regex.Match(html, @"class=""release-version""[^>]*>\s*v?(\d+\.\d+\.\d+)");
+            var match = Regex.Match(html, @"href=""/release/umbraco/Umbraco-CMS/(\d+\.\d+\.\d+)""");
             return match.Success ? match.Groups[1].Value : null;
         }
         catch
