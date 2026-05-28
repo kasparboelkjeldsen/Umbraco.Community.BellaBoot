@@ -29,3 +29,17 @@ Starts `dotnet watch run` on the selected Umbraco instance and `vite build --wat
 
 ### `bellaboot dist-usync`
 Finds the Umbraco instance with the most recently modified uSync folder and copies it to all other instances.
+
+### `bellaboot delete <version>` (alias: `del`)
+Removes `Umbraco/<version>/` and `Umbraco/<version>-nuget/` from disk and strips their entries from the `.slnx` solution file.
+
+## Backoffice AI skills
+
+The scaffolded extension project includes npm scripts to install Umbraco backoffice AI skills for your editor of choice:
+
+```
+npm run skills:claude
+npm run skills:copilot
+npm run skills:cursor
+npm run skills:windsurf
+```
