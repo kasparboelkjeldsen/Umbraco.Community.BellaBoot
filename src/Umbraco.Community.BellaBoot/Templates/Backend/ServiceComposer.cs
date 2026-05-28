@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 
-namespace {name}.Backend.Composers;
+namespace {ns}.Backend.Composers;
 
 public class ServiceComposer : IComposer
 {

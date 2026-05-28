@@ -109,7 +109,7 @@ public static class NewCommand
             T("Backend.UmbracoPackage.json").With("{name}", name).With("{namelower}", name.ToLowerInvariant()));
 
         WriteFile(Path.Combine(backendDir, "Composers"), "ServiceComposer.cs",
-            T("Backend.ServiceComposer.cs").With("{name}", name));
+            T("Backend.ServiceComposer.cs").With("{ns}", NamespaceSafe(name)));
     }
 
     // -------------------------------------------------------------------------
@@ -154,6 +154,10 @@ public static class NewCommand
     // Dots and special chars are not valid in MSBuild property/item/target names
     private static string MsBuildSafe(string name) =>
         string.Concat(name.Where(char.IsLetterOrDigit));
+
+    // Dots are valid namespace separators; everything else that isn't a letter/digit becomes _
+    private static string NamespaceSafe(string name) =>
+        string.Concat(name.Select(c => char.IsLetterOrDigit(c) || c == '.' ? c : '_'));
 
     // Fluent shorthand: T("Backend.Csproj.xml").With("{name}", value)
     private static string T(string templateName) =>
