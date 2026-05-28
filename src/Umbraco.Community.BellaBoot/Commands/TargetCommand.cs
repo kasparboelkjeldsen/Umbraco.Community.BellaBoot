@@ -1,5 +1,6 @@
 using System.CommandLine;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using Spectre.Console;
@@ -94,18 +95,32 @@ public static class TargetCommand
 
             bool isExplicitVersion = versionSelection is not ("Latest" or "LTS");
 
-            // Check if target already exists
-            if (isExplicitVersion)
+            // For Latest, try to resolve the exact version number upfront from the releases page
+            string? knownVersion = isExplicitVersion ? versionSelection : null;
+            if (versionSelection == "Latest")
             {
-                var existingDir = Path.Combine(targetDir, "Umbraco", versionSelection);
+                var fetched = await AnsiConsole.Status()
+                    .StartAsync("Checking latest release...", async ctx =>
+                    {
+                        ctx.Spinner(Spinner.Known.Dots);
+                        return await FetchLatestVersionAsync(ct);
+                    });
+                if (fetched is not null)
+                    knownVersion = fetched;
+            }
+
+            // Check if target already exists when version is known
+            if (knownVersion is not null)
+            {
+                var existingDir = Path.Combine(targetDir, "Umbraco", knownVersion);
                 if (Directory.Exists(existingDir))
                 {
-                    AnsiConsole.MarkupLine($"[yellow]Umbraco/{versionSelection}/ already exists.[/] Nothing to do.");
+                    AnsiConsole.MarkupLine($"[yellow]Umbraco/{knownVersion}/ already exists.[/] Nothing to do.");
                     return 0;
                 }
             }
 
-            AnsiConsole.MarkupLine($"  Version     : [cyan]{versionSelection}[/]");
+            AnsiConsole.MarkupLine($"  Version     : [cyan]{knownVersion ?? versionSelection}[/]");
             AnsiConsole.MarkupLine($"  Models mode : [cyan]{modelsMode}[/]");
             AnsiConsole.WriteLine();
 
@@ -139,12 +154,12 @@ public static class TargetCommand
             Directory.CreateDirectory(Path.Combine(targetDir, "Umbraco"));
 
             var umbracoProjectDir = Path.Combine(
-                targetDir, "Umbraco", isExplicitVersion ? versionSelection : "_installing");
+                targetDir, "Umbraco", knownVersion ?? "_installing");
 
             var newArgs = new List<string>
             {
                 "new", "umbraco",
-                "-n", isExplicitVersion ? $"Umbraco-{versionSelection}" : "Umbraco",
+                "-n", knownVersion is not null ? $"Umbraco-{knownVersion}" : "Umbraco",
                 "-o", umbracoProjectDir,
                 "--models-mode", modelsMode,
                 "--email", email,
@@ -169,10 +184,11 @@ public static class TargetCommand
                 return 1;
             }
 
-            // Detect actual version from generated project and rename folder
-            string resolvedVersion = versionSelection;
+            // Detect actual version from generated project and rename folder (only needed as fallback
+            // when we couldn't resolve the version upfront, e.g. LTS or failed fetch)
+            string resolvedVersion = knownVersion ?? versionSelection;
             var finalProjectDir = umbracoProjectDir;
-            if (!isExplicitVersion)
+            if (knownVersion is null && !isExplicitVersion)
             {
                 var tempCsproj = Directory.GetFiles(umbracoProjectDir, "*.csproj").FirstOrDefault();
                 var detected = tempCsproj is not null ? ExtractUmbracoVersion(tempCsproj) : null;
@@ -283,6 +299,22 @@ public static class TargetCommand
         var stdout = await stdoutTask;
         var stderr = await stderrTask;
         return (process.ExitCode, stdout + stderr);
+    }
+
+    private static async Task<string?> FetchLatestVersionAsync(CancellationToken ct)
+    {
+        try
+        {
+            using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
+            http.DefaultRequestHeaders.UserAgent.ParseAdd("BellaBoot/1.0");
+            var html = await http.GetStringAsync("https://releases.umbraco.com/all-releases", ct);
+            var match = Regex.Match(html, @"class=""release-version""[^>]*>\s*v?(\d+\.\d+\.\d+)");
+            return match.Success ? match.Groups[1].Value : null;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private static string? ExtractUmbracoVersion(string csprojPath)
